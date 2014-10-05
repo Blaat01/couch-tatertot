@@ -397,7 +397,12 @@ public class CouchPotato {
 			// TypeToken cannot figure out T so instead it must be supplied
 			GsonBuilder build = new GsonBuilder();
 			build.registerTypeAdapter(JsonBoolean.class, new JsonBooleanDeserializer() );
-			T response = build.create().fromJson( reader, type );
+            T response;
+            if (type == MovieListJson.class) {
+                response = (T)build.create().fromJson(reader, _NewAPI_MovieListJson.class).toOld();
+            } else {
+                response = build.create().fromJson(reader, type);
+            }
 			return response;
 		} catch ( URISyntaxException e ) {
 			throw new MalformedURLException(e.getMessage());
